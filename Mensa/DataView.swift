@@ -7,24 +7,27 @@
 //
 
 /// UITableView or UICollectionView, used for displaying data.
-public protocol DataView: class {
+public protocol DataView where Self: UIScrollView {
     init()
     func reloadData()
+}
 
-    var frame: CGRect { get set }
-    var backgroundColor: UIColor? { get set }
-    var autoresizingMask: UIViewAutoresizing { get set }
-    var contentOffset: CGPoint { get set }
-    var contentInset: UIEdgeInsets { get set }
-    var scrollIndicatorInsets: UIEdgeInsets { get set }
-    var showsHorizontalScrollIndicator: Bool { get set }
-    var showsVerticalScrollIndicator: Bool { get set }
-    var isScrollEnabled: Bool { get set }
-    var isPagingEnabled: Bool { get set }
-    var isDirectionalLockEnabled: Bool { get set }
-    var bounces: Bool { get set }
-    var alwaysBounceVertical: Bool { get set }
-    var alwaysBounceHorizontal: Bool { get set }
+public extension DataView {
+    var isScrolledToTop: Bool {
+        return contentOffset.y == -adjustedContentInset.top
+    }
+    
+    func scrollToTop(animated: Bool) {
+        let offset = CGPoint(x: contentOffset.x, y: -adjustedContentInset.top)
+        
+        if animated {
+            if delegate?.scrollViewShouldScrollToTop?(self) ?? false {
+                setContentOffset(offset, animated: true)
+            }
+        } else {
+            contentOffset = offset
+        }
+    }
 }
 
 extension UITableView: DataView {}

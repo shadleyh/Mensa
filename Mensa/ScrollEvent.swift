@@ -18,21 +18,3 @@ public enum ScrollEvent {
     case willScrollToTop
     case didScrollToTop
 }
-
-public extension UIScrollView {
-    var isScrolledToTop: Bool {
-        return contentOffset.y == -contentInset.top
-    }
-    
-    func scrollToTop(animated: Bool) {
-        let offset = CGPoint(x: contentOffset.x, y: -contentInset.top)
-        
-        if animated {
-            if delegate?.scrollViewShouldScrollToTop?(self) ?? false {
-                setContentOffset(offset, animated: true)
-            }
-        } else {
-            contentOffset = offset
-        }
-    }
-}

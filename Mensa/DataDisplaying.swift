@@ -75,9 +75,9 @@ public extension DataDisplaying where Self: UIViewController {
         return dataView as? CollectionViewType
     }
     
-    private(set) var dataView: DataView {
+    private(set) var dataView: DataView & UIScrollView {
         get {
-            return associatedObject(for: &dataViewKey) as! DataView
+            return associatedObject(for: &dataViewKey) as! DataView & UIScrollView
         }
         set {
             setAssociatedObject(newValue, for: &dataViewKey)
@@ -93,7 +93,7 @@ public extension DataDisplaying where Self: UIViewController {
     
     // Call this method to set up a display context in a view controller by adding an appropriate data view as a subview.
     func setDisplayContext() {
-        let dataView: UIView
+        let dataView: DataView & UIScrollView
         var tableViewCellSeparatorInset: CGFloat? = nil
         var hidesLastTableViewCellSeparator = false
         
