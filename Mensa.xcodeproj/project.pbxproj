@@ -47,7 +47,7 @@
 		178DC46E1F632144003966A5 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178DC46D1F632144003966A5 /* Loading.swift */; };
 		178E5E501E2FF474000EF36C /* Preparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178E5E4F1E2FF474000EF36C /* Preparable.swift */; };
 		17A2E4171EDF72EC002228DD /* Cipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17A2E4161EDF72EC002228DD /* Cipher.framework */; };
-		17C406451D429C3000B5F1DB /* Scrolling.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C406441D429C3000B5F1DB /* Scrolling.swift */; };
+		17C406451D429C3000B5F1DB /* ScrollEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C406441D429C3000B5F1DB /* ScrollEvent.swift */; };
 		17D5059C1FA417B600A29C4F /* HeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D5059B1FA417B600A29C4F /* HeaderFooterView.swift */; };
 		17D505A11FA5473E00A29C4F /* SupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D505A01FA5473E00A29C4F /* SupplementaryView.swift */; };
 		17E740A31F6C7700006BB95E /* Navigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17E740A21F6C7700006BB95E /* Navigation.swift */; };
@@ -118,7 +118,7 @@
 		178DC46D1F632144003966A5 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		178E5E4F1E2FF474000EF36C /* Preparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preparable.swift; sourceTree = "<group>"; };
 		17A2E4161EDF72EC002228DD /* Cipher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cipher.framework; path = Carthage/Build/iOS/Cipher.framework; sourceTree = "<group>"; };
-		17C406441D429C3000B5F1DB /* Scrolling.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Scrolling.swift; sourceTree = "<group>"; };
+		17C406441D429C3000B5F1DB /* ScrollEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollEvent.swift; sourceTree = "<group>"; };
 		17D5059B1FA417B600A29C4F /* HeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderFooterView.swift; sourceTree = "<group>"; };
 		17D505A01FA5473E00A29C4F /* SupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryView.swift; sourceTree = "<group>"; };
 		17E740A21F6C7700006BB95E /* Navigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Navigation.swift; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 				17D5059B1FA417B600A29C4F /* HeaderFooterView.swift */,
 				178E5E4F1E2FF474000EF36C /* Preparable.swift */,
 				175B360D1EBD3593004FA581 /* Registration.swift */,
-				17C406441D429C3000B5F1DB /* Scrolling.swift */,
+				17C406441D429C3000B5F1DB /* ScrollEvent.swift */,
 				172341101D19E5E100011CA6 /* Section.swift */,
 				17FA64361ED61D940090F1EB /* StringView.swift */,
 				17D505A01FA5473E00A29C4F /* SupplementaryView.swift */,
@@ -424,7 +424,7 @@
 				174C13331EC11EA000293EE9 /* ItemDisplayingViewController.swift in Sources */,
 				178E5E501E2FF474000EF36C /* Preparable.swift in Sources */,
 				178AC4931E4D086B005BD6A6 /* NibLoading.swift in Sources */,
-				17C406451D429C3000B5F1DB /* Scrolling.swift in Sources */,
+				17C406451D429C3000B5F1DB /* ScrollEvent.swift in Sources */,
 				174C132A1EC1152200293EE9 /* DataDisplayContext.swift in Sources */,
 				1704D15E1D1A817F00DA15E6 /* HostingCell.swift in Sources */,
 				175B360E1EBD3593004FA581 /* Registration.swift in Sources */,
