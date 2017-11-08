@@ -2,9 +2,9 @@
 
 Shows three simple techniques for modern table views and collection views. The three techniques are each separate in concept but are combined in this demo project; you can use each independently.
 
-## Computation of row height or item size via auto-layout
+## Computation of row height or item size via auto layout
 
-The table or collection view controller’s data mediator keeps a extra ‘metrics’ cell property that is used to populate and layout cells for height calculation purposes.
+The table or collection view controller’s data mediator keeps a extra metrics cell property that is used to populate and layout cells for height calculation purposes.
 
 This is primarily useful for cells that use Auto Layout. You no longer have to perform clumsy and awkward height calculation - just use Auto Layout and you get height calculation for free.
 
