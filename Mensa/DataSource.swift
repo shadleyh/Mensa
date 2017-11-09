@@ -55,6 +55,10 @@ extension ListHolder {
 public struct ListDataSource<T>: ListHolder {
     public var items: [T]
     
+    public init(_ items: [T]) {
+        self.items = items
+    }
+    
     public init(_ initialItem: T) {
         items = [initialItem]
     }
