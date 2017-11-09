@@ -8,15 +8,24 @@
 
 /// Values that conform can be used to differentiate between different ways to display a given item.
 public protocol DisplayVariant {
+    init?(rawValue: Int)
     var rawValue: Int { get }
 }
 
-/// Used when there is no need to specify a variant.
-public struct DefaultDisplayVariant: DisplayVariant {
-    public init() {}
-    public var rawValue: Int { return 0 }
+extension DisplayVariant {
+    public static var `default`: Self {
+        return Self(rawValue: 0)!
+    }
 }
 
-public func ==(lhs: DisplayVariant, rhs: DisplayVariant) -> Bool {
-    return lhs.rawValue == rhs.rawValue
+public struct DisplayInvariant {
+    public init() {}
+}
+
+extension DisplayInvariant: DisplayVariant {
+    public init?(rawValue: Int) {}
+    
+    public var rawValue: Int {
+        return 0
+    }
 }

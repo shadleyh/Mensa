@@ -15,5 +15,5 @@ public class LoadingItemView: UIView {
 }
 
 extension LoadingItemView: Displayed {
-    public func update(with loadingItem: LoadingItem, variant: DisplayVariant) {}
+    public func update(with loadingItem: LoadingItem, variant: DisplayInvariant) {}
 }

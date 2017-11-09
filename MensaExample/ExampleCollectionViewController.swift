@@ -39,9 +39,8 @@ extension ExampleCollectionViewController: DataDisplaying {
         if viewType == PrimeFlagView.self {
             return PrimeFlagView.Context.compact
         }
-        return DefaultDisplayVariant()
+        return DisplayInvariant()
     }
-    
     
     func identifier(forSection section: Int) -> String? {
         return "Foo"

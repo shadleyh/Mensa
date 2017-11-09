@@ -11,9 +11,7 @@ public final class StringView: UIView {
 }
 
 extension StringView: Displayed {
-    public typealias Item = String
-    
-    public func update(with string: String, variant: DisplayVariant) {
+    public func update(with string: String, variant: DisplayInvariant) {
         (label as? UILabel)?.text = string
         (label as? UITextView)?.text = string
     }

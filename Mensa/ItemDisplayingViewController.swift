@@ -8,15 +8,15 @@
 
 final class ItemDisplayingViewController: UIViewController {
     private let nameOfNib: String
-    private let update: (Any, DisplayVariant, Bool) -> Void
+    private let update: (Any, Any, Bool) -> Void
     private let updateForResting: (Any) -> Void
     private let select: (Any) -> Void
     private let canSelect: (Any) -> Bool
     private let canRemove: (Any) -> Bool
     private let setHighlighted: (Any, Bool, Bool) -> Void
-    private let hostsWithConstraints: (DisplayVariant) -> Bool
-    private let isItemHeightBasedOnTemplate: (DisplayVariant) -> Bool
-    private let itemSizingStrategy: (Any, DisplayVariant) -> ItemSizingStrategy
+    private let hostsWithConstraints: (Any) -> Bool
+    private let isItemHeightBasedOnTemplate: (Any) -> Bool
+    private let itemSizingStrategy: (Any, Any) -> ItemSizingStrategy
 
     private var didLoadView = false
     
@@ -29,15 +29,15 @@ final class ItemDisplayingViewController: UIViewController {
         select = { viewController.selectItem($0 as! V.Item) }
         canSelect = { viewController.canSelectItem($0 as! V.Item) }
         setHighlighted = { viewController.setItemHighlighted($0 as! V.Item, highlighted: $1, animated: $2) }
-        hostsWithConstraints = { viewController.hostsWithConstraints(displayedWith: $0) }
-        isItemHeightBasedOnTemplate = { viewController.isItemHeightBasedOnTemplate(displayedWith: $0) }
-        itemSizingStrategy = { viewController.itemSizingStrategy(for: $0 as! V.Item, displayedWith: $1) }
+        hostsWithConstraints = { viewController.hostsWithConstraints(displayedWith: $0 as! V.DisplayVariantType) }
+        isItemHeightBasedOnTemplate = { viewController.isItemHeightBasedOnTemplate(displayedWith: $0 as! V.DisplayVariantType) }
+        itemSizingStrategy = { viewController.itemSizingStrategy(for: $0 as! V.Item, displayedWith: $1 as! V.DisplayVariantType) }
         canRemove = {
             ($0 as? V.Item).map { viewController.canRemoveItem($0) } ?? false
         }
         update = {
             (viewController.view as? Preparable)?.prepare()
-            viewController.update(with: $0 as! V.Item, variant: $1, displayed: $2)
+            viewController.update(with: $0 as! V.Item, variant: $1 as! V.DisplayVariantType, displayed: $2)
         }
         updateForResting = {
             if let item = $0 as? V.Item {
@@ -89,8 +89,9 @@ final class ItemDisplayingViewController: UIViewController {
 extension ItemDisplayingViewController: ItemDisplaying {
     typealias Item = Any
     typealias View = UIView
+    typealias DisplayVariantType = Any
     
-    func update(with item: Item, variant: DisplayVariant, displayed: Bool) {
+    func update(with item: Item, variant: DisplayVariantType, displayed: Bool) {
         update(item, variant, displayed)
     }
     
@@ -114,15 +115,15 @@ extension ItemDisplayingViewController: ItemDisplaying {
         setHighlighted(item, highlighted, animated)
     }
     
-    func hostsWithConstraints(displayedWith variant: DisplayVariant) -> Bool {
+    func hostsWithConstraints(displayedWith variant: DisplayVariantType) -> Bool {
         return hostsWithConstraints(variant)
     }
     
-    func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariant) -> Bool {
+    func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariantType) -> Bool {
         return isItemHeightBasedOnTemplate(variant)
     }
     
-    func itemSizingStrategy(for item: Item, displayedWith variant: DisplayVariant) -> ItemSizingStrategy {
+    func itemSizingStrategy(for item: Item, displayedWith variant: DisplayVariantType) -> ItemSizingStrategy {
         return itemSizingStrategy(item, variant)
     }
 }
