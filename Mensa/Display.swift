@@ -15,12 +15,13 @@ public protocol Displaying: class {
 /// Type (usually a view) that is displayed with an item, which can be updated.
 public protocol Displayed: class {
     associatedtype Item
+    associatedtype DisplayVariantType: DisplayVariant
     
-    func update(with item: Item, variant: DisplayVariant)
+    func update(with item: Item, variant: DisplayVariantType)
 }
 
 public extension Displayed {
     func update(with item: Item) {
-        update(with: item, variant: DefaultDisplayVariant())
+        update(with: item, variant: DisplayVariantType.default)
     }
 }

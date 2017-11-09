@@ -56,7 +56,7 @@ public extension DataDisplaying {
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
     func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool) {}
-    func variant(for item: Item, viewType: View.Type) -> DisplayVariant { return DefaultDisplayVariant() }
+    func variant(for item: Item, viewType: View.Type) -> DisplayVariant { return DisplayInvariant() }
     func identifier(forSection section: Int) -> String? { return nil }
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
     func sizeInsets(for indexPath: IndexPath) -> UIEdgeInsets { return .zero }
