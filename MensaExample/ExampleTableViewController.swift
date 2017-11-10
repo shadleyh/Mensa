@@ -32,6 +32,13 @@ extension ExampleTableViewController: DataDisplaying {
             numberView.valueLabel.font = UIFont.systemFont(ofSize: size)
         }
     }
+    
+    func variant(for item: Item, viewType: View.Type) -> DisplayVariant {
+        if viewType == PrimeFlagView.self {
+            return PrimeFlagView.Context.regular
+        }
+        return DisplayInvariant()
+    }
 }
 
 private extension Int {

@@ -11,8 +11,9 @@ import Mensa
 final class PrimeFlagViewController: UIViewController, ItemDisplaying {
     typealias Item = PrimeFlag
     typealias View = PrimeFlagView
+    typealias DisplayVariantType = PrimeFlagView.Context
     
-    func itemSizingStrategy(for primeFlag: PrimeFlag, displayedWith variant: DisplayInvariant) -> ItemSizingStrategy {
+    func itemSizingStrategy(for primeFlag: PrimeFlag, displayedWith variant: DisplayVariant) -> ItemSizingStrategy {
         return ItemSizingStrategy(widthReference: .template, heightReference: .template)
     }
 }
