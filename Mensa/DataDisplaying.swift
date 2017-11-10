@@ -124,7 +124,7 @@ public extension DataDisplaying where Self: UIViewController {
             self.dataView = collectionView
         }
         
-        view.addSubview(dataView)
+        view.insertSubview(dataView, at: 0)
         dataView.frame = view.bounds
         dataView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupDataView()
