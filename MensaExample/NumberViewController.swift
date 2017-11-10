@@ -11,7 +11,6 @@ import Mensa
 final class NumberViewController: UIViewController, ItemDisplaying {
     typealias Item = Number
     typealias View = NumberView
-    typealias DisplayVariantType = DisplayInvariant
     
     func update(with number: Number, variant: DisplayInvariant, displayed: Bool) {
         view.valueLabel.text = "\(number.value)"

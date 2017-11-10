@@ -8,6 +8,8 @@
 
 /// Displays a single item using a view, updating the view based on the item’s properties.
 public protocol ItemDisplaying: Displaying {
+    associatedtype DisplayVariantType
+
     func update(with item: Item, variant: DisplayVariantType, displayed: Bool)
     func updateForResting(with item: Item)
     func selectItem(_ item: Item)
@@ -19,7 +21,7 @@ public protocol ItemDisplaying: Displaying {
     func itemSizingStrategy(for item: Item, displayedWith variant: DisplayVariantType) -> ItemSizingStrategy
 }
 
-public extension ItemDisplaying {
+public extension ItemDisplaying where DisplayVariantType: DisplayVariant {
     func selectItem(_ item: Item) {}
     func updateForResting(with item: Item) {}
     func canSelectItem(_ item: Item) -> Bool { return true }
@@ -33,7 +35,7 @@ public extension ItemDisplaying {
     }
 }
 
-public extension ItemDisplaying where Self: UIViewController {
+public extension ItemDisplaying where Self: UIViewController, DisplayVariantType: DisplayVariant {
     var view: View {
         return view as! View
     }
