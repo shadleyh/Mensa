@@ -8,8 +8,6 @@
 
 /// Displays a single item using a view, updating the view based on the item’s properties.
 public protocol ItemDisplaying: Displaying {
-    associatedtype DisplayVariantType = DisplayInvariant
-
     func update(with item: Item, variant: DisplayVariantType, displayed: Bool)
     func updateForResting(with item: Item)
     func selectItem(_ item: Item)

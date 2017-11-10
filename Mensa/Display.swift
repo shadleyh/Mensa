@@ -10,6 +10,7 @@
 public protocol Displaying: class {
     associatedtype Item
     associatedtype View: UIView = UIView
+    associatedtype DisplayVariantType = DisplayVariant
 }
 
 /// Type (usually a view) that is displayed with an item, which can be updated.
