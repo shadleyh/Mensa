@@ -35,7 +35,7 @@ public extension ItemDisplaying where DisplayVariantType: DisplayVariant {
     }
 }
 
-public extension ItemDisplaying where Self: UIViewController, DisplayVariantType: DisplayVariant {
+public extension ItemDisplaying where Self: UIViewController {
     var view: View {
         return view as! View
     }
