@@ -28,7 +28,7 @@ public protocol DataDisplaying: Displaying {
     func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool)
     
     // Specify which display variant should be used for the given item, other than the default.
-    func variant(for item: Item, viewType: View.Type) -> DisplayVariant
+    func variant(for item: Item) -> DisplayVariant
     
     //
     func identifier(forSection section: Int) -> String?
@@ -55,7 +55,7 @@ public protocol DataDisplaying: Displaying {
 public extension DataDisplaying {
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
-    func variant(for item: Item, viewType: View.Type) -> DisplayVariant { return DisplayInvariant() }
+    func variant(for item: Item) -> DisplayVariant { return DisplayInvariant() }
     func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool) {}
     func identifier(forSection section: Int) -> String? { return nil }
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
