@@ -9,6 +9,7 @@
 /// Section of data that can be displayed in a data view.
 public struct Section<Item> {
     let title: String?
+    let subtitle: String?
     let summary: String?
     
     private let items: [Item]
@@ -17,9 +18,10 @@ public struct Section<Item> {
         return items.count
     }
     
-    public init(_ items: [Item], title: String? = nil, summary: String? = nil) {
+    public init(_ items: [Item], title: String? = nil, subtitle: String? = nil, summary: String? = nil) {
         self.items = items
         self.title = title
+        self.subtitle = subtitle
         self.summary = summary
     }
     

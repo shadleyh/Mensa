@@ -344,7 +344,7 @@ private extension DataMediator {
     func info(for indexPath: IndexPath) -> (Item, DisplayVariant, String) {
         let item = currentSections[indexPath.section][indexPath.row]
         let key = String(describing: type(of: item as Any))
-        let variant = displayer.variant(for: item, viewType: View.self)
+        let variant = displayer.variant(for: item)
         let identifier = key + String(variant.rawValue)
         return (item, variant, identifier)
     }
@@ -367,9 +367,9 @@ private extension DataMediator {
         }
     }
     
-    func summary(forSection section: Int) -> String? {
+    func detailText(forSection section: Int) -> String? {
         let section = currentSections[section]
-        return section.summary
+        return section.subtitle
     }
     
     func viewController(for type: Any) -> ItemDisplayingViewController {
@@ -468,6 +468,7 @@ private extension DataMediator {
     func headerFooterView(in tableView: UITableView, forSection section: Int, ofType type: SectionViewType) -> HeaderFooterView? {
         guard let text = self.text(for: type, inSection: section) else { return nil }
         
+        let detailText = self.detailText(forSection: section)
         let identifier = self.identifier(for: type, inSection: section)
         if !registeredHeaderFooterViewIdentifiers.contains(identifier) {
             let nib = UINib(nibName: identifier, bundle: Bundle.main)
@@ -475,15 +476,17 @@ private extension DataMediator {
             registeredHeaderFooterViewIdentifiers.insert(identifier)
         }
         
-        guard let headerFooterView = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? HeaderFooterView else { return nil }
-        headerFooterView.label?.text = text
-        return headerFooterView
+        guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? HeaderFooterView else { return nil }
+        view.label?.text = text
+        view.detailLabel?.text = detailText
+        return view
     }
     
     func supplementaryView(in collectionView: UICollectionView, for indexPath: IndexPath, ofType type: SectionViewType) -> SupplementaryView? {
         let section = indexPath.section
         guard let text = self.text(for: type, inSection: section) else { return nil }
         
+        let detailText = self.detailText(forSection: section)
         let kind = type.collectionElementKind
         let identifier = self.identifier(for: type, inSection: section)
         if !registeredSupplementaryViewIdentifiers.contains(identifier) {
@@ -492,19 +495,26 @@ private extension DataMediator {
             registeredSupplementaryViewIdentifiers.insert(identifier)
         }
         
-        guard let supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath) as? SupplementaryView else { return nil }
-        supplementaryView.label?.text = text
-        return supplementaryView
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: identifier, for: indexPath) as? SupplementaryView else { return nil }
+        view.label?.text = text
+        view.detailLabel?.text = detailText
+        return view
     }
     
     func sizeForSupplementaryView(ofType type: SectionViewType, inSection section: Int) -> CGSize {
-        guard text(for: type, inSection: section) != nil else { return .zero }
+        guard let text = text(for: type, inSection: section) else { return .zero }
         
+        let detailText = self.detailText(forSection: section)
         let identifier = self.identifier(for: type, inSection: section)
         let height = heightCache[identifier] ?? {
             let nib = UINib(nibName: identifier, bundle: Bundle.main)
-            let view = nib.instantiate(withOwner: nil, options: nil).first as! UIView
-            let height = view.bounds.height
+            let view = nib.instantiate(withOwner: nil, options: nil).first as! SupplementaryView
+            view.label?.text = text
+            view.detailLabel?.text = detailText
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            
+            let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
             heightCache[identifier] = height
             return height
         }()
