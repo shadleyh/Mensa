@@ -147,6 +147,17 @@ final class DataMediator<Displayer: DataDisplaying>: NSObject, UITableViewDataSo
         return headerFooterView(in: tableView, forSection: section, ofType: .footer)
     }
     
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        view.backgroundColor = .clear
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
+        view.backgroundColor = .clear
+    }
+    
+    // TODO: Header and footer height automatic
+    // http://collindonnell.com/2015/09/29/dynamically-sized-table-view-header-or-footer-using-auto-layout/
+    
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
@@ -316,6 +327,10 @@ final class DataMediator<Displayer: DataDisplaying>: NSObject, UITableViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
         return sizeForSupplementaryView(ofType: .footer, inSection: section)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
+        view.backgroundColor = .clear
     }
     
     // MARK: UIScrollViewDelegate
