@@ -33,8 +33,8 @@ extension ExampleTableViewController: DataDisplaying {
         }
     }
     
-    func variant(for item: Item, viewType: View.Type) -> DisplayVariant {
-        if viewType == PrimeFlagView.self {
+    func variant(for item: Item) -> DisplayVariant {
+        if item is PrimeFlag {
             return PrimeFlagView.Context.regular
         }
         return DisplayInvariant()
