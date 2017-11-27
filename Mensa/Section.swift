@@ -7,7 +7,8 @@
 //
 
 /// Section of data that can be displayed in a data view.
-public struct Section<Item> {
+public struct Section<Item, Identifier: SectionIdentifier> {
+    let identifier: Identifier?
     let title: String?
     let subtitle: String?
     let summary: String?
@@ -18,7 +19,8 @@ public struct Section<Item> {
         return items.count
     }
     
-    public init(_ items: [Item], title: String? = nil, subtitle: String? = nil, summary: String? = nil) {
+    public init(_ items: [Item], identifier: Identifier? = nil, title: String? = nil, subtitle: String? = nil, summary: String? = nil) {
+        self.identifier = identifier
         self.items = items
         self.title = title
         self.subtitle = subtitle
@@ -42,4 +44,10 @@ extension Section: Sequence {
             return nil
         }
     }
+}
+
+public protocol SectionIdentifier: RawRepresentable where RawValue == String {}
+
+public enum DefaultSection: String, SectionIdentifier {
+    case section
 }

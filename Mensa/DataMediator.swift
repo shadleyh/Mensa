@@ -6,14 +6,15 @@
 //  Copyright © 2016 Jordan Kay. All rights reserved.
 //
 
-final class DataMediator<Displayer: DataDisplaying>: NSObject, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
+final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     typealias Item = Displayer.Item
     typealias View = Displayer.View
+    typealias Identifier = Displayer.DataSourceType.Identifier
     
     private let tableViewCellSeparatorInset: CGFloat?
     private let hidesLastTableViewCellSeparator: Bool
     
-    private var currentSections: [Section<Item>]
+    private var currentSections: [Section<Item, Identifier>]
     private var registeredIdentifiers = Set<String>()
     private var registeredHeaderFooterViewIdentifiers = Set<String>()
     private var registeredSupplementaryViewIdentifiers = Set<String>()
@@ -366,7 +367,7 @@ private extension DataMediator {
     
     func identifier(for type: SectionViewType, inSection section: Int) -> String {
         var identifier = "\(type.rawValue)View"
-        if let sectionIdentifier = displayer.identifier(forSection: section) {
+        if let sectionIdentifier = currentSections[section].identifier?.rawValue {
             identifier = sectionIdentifier + identifier
         }
         return identifier

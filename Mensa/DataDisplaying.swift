@@ -30,9 +30,6 @@ public protocol DataDisplaying: Displaying {
     // Specify which display variant should be used for the given item, other than the default.
     func variant(for item: Item) -> DisplayVariant
     
-    //
-    func identifier(forSection section: Int) -> String?
-    
     // How the given section is inset, if at all.
     func sectionInsets(forSection section: Int) -> UIEdgeInsets?
     
@@ -57,7 +54,6 @@ public extension DataDisplaying {
     func setupDataView() {}
     func variant(for item: Item) -> DisplayVariant { return DisplayInvariant() }
     func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool) {}
-    func identifier(forSection section: Int) -> String? { return nil }
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
     func sizeInsets(for indexPath: IndexPath) -> UIEdgeInsets { return .zero }
     func handle(_ scrollEvent: ScrollEvent) {}
@@ -129,7 +125,7 @@ public extension DataDisplaying where Self: UIViewController {
         dataView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupDataView()
         
-        let dataMediator = DataMediator<Self>(displayer: self, parentViewController: self, tableViewCellSeparatorInset: tableViewCellSeparatorInset, hidesLastTableViewCellSeparator: hidesLastTableViewCellSeparator)
+        let dataMediator = DataMediator<Self, DataSourceType.Identifier>(displayer: self, parentViewController: self, tableViewCellSeparatorInset: tableViewCellSeparatorInset, hidesLastTableViewCellSeparator: hidesLastTableViewCellSeparator)
         setAssociatedObject(dataMediator, for: &dataMediatorKey)
         
         if let tableView = dataView as? UITableView {
@@ -246,8 +242,8 @@ private var dataViewKey = "displayViewKey"
 private var dataMediatorKey = "dataMediatorKey"
 
 private extension DataDisplaying where Self: UIViewController {
-    var dataMediator: DataMediator<Self>? {
-        return (dataView as? UITableView)?.dataSource as? DataMediator<Self> ?? (dataView as? UICollectionView)?.dataSource as? DataMediator<Self>
+    var dataMediator: DataMediator<Self, DataSourceType.Identifier>? {
+        return (dataView as? UITableView)?.dataSource as? DataMediator<Self, DataSourceType.Identifier> ?? (dataView as? UICollectionView)?.dataSource as? DataMediator<Self, DataSourceType.Identifier>
     }
     
     func resetData() {
