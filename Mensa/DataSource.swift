@@ -9,8 +9,9 @@
 /// Protocol to adopt in order to provide sections of data.
 public protocol DataSource {
     associatedtype Item
+    associatedtype Identifier: SectionIdentifier = DefaultSection
     
-    var sections: [Section<Item>] { get }
+    var sections: [Section<Item, Identifier>] { get }
 }
 
 public protocol ListHolder: DataSource {
@@ -29,7 +30,7 @@ extension ListHolder {
         return items.count
     }
     
-    public var sections: [Section<T>] {
+    public var sections: [Section<T, Identifier>] {
         return [Section(items)]
     }
     

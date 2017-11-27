@@ -18,7 +18,7 @@ struct ExampleDataSource {
 }
 
 extension ExampleDataSource: DataSource {
-    var sections: [Section<NumberOrPrimeFlag>] {
+    var sections: [Section<NumberOrPrimeFlag, DefaultSection>] {
         return [Section(items(count: itemCount))]
     }
 }

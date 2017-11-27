@@ -41,10 +41,6 @@ extension ExampleCollectionViewController: DataDisplaying {
         }
         return DisplayInvariant()
     }
-    
-    func identifier(forSection section: Int) -> String? {
-        return "Foo"
-    }
 }
 
 private extension Int {
