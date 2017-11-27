@@ -48,6 +48,12 @@ extension Section: Sequence {
 
 public protocol SectionIdentifier: RawRepresentable where RawValue == String {}
 
+extension SectionIdentifier {
+    var name: String {
+        return rawValue.capitalized
+    }
+}
+
 public enum DefaultSection: String, SectionIdentifier {
     case section
 }

@@ -367,8 +367,8 @@ private extension DataMediator {
     
     func identifier(for type: SectionViewType, inSection section: Int) -> String {
         var identifier = "\(type.rawValue)View"
-        if let sectionIdentifier = currentSections[section].identifier?.rawValue {
-            identifier = sectionIdentifier + identifier
+        if let sectionIdentifierName = currentSections[section].identifier?.name {
+            identifier = sectionIdentifierName + identifier
         }
         return identifier
     }
