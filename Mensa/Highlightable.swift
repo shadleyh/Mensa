@@ -13,7 +13,7 @@ public protocol Highlightable {
     func setHighlighted(_ highlighted: Bool, animated: Bool)
 }
 
-extension ItemDisplaying where Self: UIViewController, View: Highlightable, DisplayVariantType: DisplayVariant {
+public extension ItemDisplaying where Self: UIViewController, View: Highlightable, DisplayVariantType: DisplayVariant {
     func setItemHighlighted(_ item: Item, highlighted: Bool, animated: Bool) {
         view.setHighlighted(highlighted, animated: animated)
     }
