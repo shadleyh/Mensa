@@ -16,26 +16,23 @@ public extension NSCoding where Self: NSObject {
     }
     
     func decodeProperties(from coder: NSCoder, manuallyDecode: () -> Void = {}) {
-#if !TARGET_INTERFACE_BUILDER
-        guard coder is NSKeyedUnarchiver else { return }
+        guard coder is NSKeyedUnarchiver, !isTargetInterfaceBuilder else { return }
         properties.forEach { key, _ in
             if let value = coder.decodeObject(forKey: key) {
                 setValue(value, forKey: key)
             }
         }
         manuallyDecode()
-#endif
     }
     
     func encodeProperties(with coder: NSCoder, manuallyEncode: () -> Void = {}) {
-#if !TARGET_INTERFACE_BUILDER
+        guard !isTargetInterfaceBuilder else { return }
         properties.forEach { key, value in
             if self.value(forKey: key) != nil {
                 coder.encode(value, forKey: key)
             }
         }
         manuallyEncode()
-#endif
     }
 }
 
@@ -60,4 +57,9 @@ private extension NSCoding where Self: NSObject {
         }
         return propertyKeys.map { ($0, value(forKey: $0)) }
     }
+}
+
+private var isTargetInterfaceBuilder: Bool {
+    guard let identifier = Bundle.main.bundleIdentifier else { return true }
+    return identifier.range(of: "com.apple") != nil
 }

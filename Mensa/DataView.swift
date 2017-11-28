@@ -14,12 +14,11 @@ public protocol DataView where Self: UIScrollView {
 
 public extension DataView {
     var isScrolledToTop: Bool {
-        return contentOffset.y == -adjustedContentInset.top
+        return contentOffset.y == -topInset
     }
     
     func scrollToTop(animated: Bool) {
-        let offset = CGPoint(x: contentOffset.x, y: -adjustedContentInset.top)
-        
+        let offset = CGPoint(x: contentOffset.x, y: -topInset)
         if animated {
             if delegate?.scrollViewShouldScrollToTop?(self) ?? false {
                 setContentOffset(offset, animated: true)
@@ -27,6 +26,18 @@ public extension DataView {
         } else {
             contentOffset = offset
         }
+    }
+}
+
+private extension DataView {
+    var topInset: CGFloat {
+        let inset: UIEdgeInsets
+        if #available(iOS 11.0, *) {
+            inset = adjustedContentInset
+        } else {
+            inset = contentInset
+        }
+        return inset.top
     }
 }
 
