@@ -14,8 +14,9 @@ protocol HostingCell {
 extension HostingCell {
     func hostContent(parentViewController: UIViewController, variant: DisplayVariant, usingConstraints: Bool) {
         hostedViewController.loadViewFromNib(for: variant)
-        hostedViewController.host(contentView, in: parentViewController)
         hostedViewController.view.backgroundColor = .clear
+        hostedViewController.view.layer.masksToBounds = contentView.layer.masksToBounds
+        hostedViewController.view.layer.cornerRadius = contentView.layer.cornerRadius
         
         if usingConstraints {
             for attribute: NSLayoutAttribute in [.top, .left, .bottom, .right] {
