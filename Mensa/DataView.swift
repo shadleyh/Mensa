@@ -13,6 +13,16 @@ public protocol DataView where Self: UIScrollView {
 }
 
 public extension DataView {
+    var topInset: CGFloat {
+        let inset: UIEdgeInsets
+        if #available(iOS 11.0, *) {
+            inset = adjustedContentInset
+        } else {
+            inset = contentInset
+        }
+        return inset.top
+    }
+    
     var isScrolledToTop: Bool {
         return contentOffset.y == -topInset
     }
@@ -26,18 +36,6 @@ public extension DataView {
         } else {
             contentOffset = offset
         }
-    }
-}
-
-private extension DataView {
-    var topInset: CGFloat {
-        let inset: UIEdgeInsets
-        if #available(iOS 11.0, *) {
-            inset = adjustedContentInset
-        } else {
-            inset = contentInset
-        }
-        return inset.top
     }
 }
 
