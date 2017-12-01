@@ -17,6 +17,8 @@ public protocol DataDisplaying: Displaying {
     
     // The context (table or collection view and its properties) for displaying the data.
     var displayContext: DataDisplayContext { get }
+    
+    var statusBarBackgroundColor: UIColor? { get }
 
     // Implementors should call `register` for each view controller type that they want to represent each item type displayed.
     func registerItemTypeViewControllerTypePairs()
@@ -50,6 +52,7 @@ public protocol DataDisplaying: Displaying {
 }
 
 public extension DataDisplaying {
+    var statusBarBackgroundColor: UIColor? { return nil }
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
     func variant(for item: Item) -> DisplayVariant { return DisplayInvariant() }
@@ -124,6 +127,12 @@ public extension DataDisplaying where Self: UIViewController {
         dataView.frame = view.bounds
         dataView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
         setupDataView()
+        
+        if let backgroundColor = statusBarBackgroundColor {
+            let statusBarView = UIView(frame: UIApplication.shared.statusBarFrame)
+            statusBarView.backgroundColor = backgroundColor
+            view.addSubview(statusBarView)
+        }
         
         let dataMediator = DataMediator<Self, DataSourceType.Identifier>(displayer: self, parentViewController: self, tableViewCellSeparatorInset: tableViewCellSeparatorInset, hidesLastTableViewCellSeparator: hidesLastTableViewCellSeparator)
         setAssociatedObject(dataMediator, for: &dataMediatorKey)
