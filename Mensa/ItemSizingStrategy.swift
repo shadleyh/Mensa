@@ -16,9 +16,9 @@ public struct ItemSizingStrategy {
         case average(CGFloat)
     }
     
-    let widthReference: DimensionReference
-    let heightReference: DimensionReference
-    let maxContainerMargin: CGFloat?
+    public let widthReference: DimensionReference
+    public let heightReference: DimensionReference
+    public let maxContainerMargin: CGFloat?
     
     public init(widthReference: DimensionReference, heightReference: DimensionReference, maxContainerMargin: CGFloat? = nil) {
         self.widthReference = widthReference
