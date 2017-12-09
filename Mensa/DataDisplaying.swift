@@ -126,6 +126,12 @@ public extension DataDisplaying where Self: UIViewController {
         view.insertSubview(dataView, at: 0)
         dataView.frame = view.bounds
         dataView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        if #available (iOS 11, *) {} else {
+            dataView.contentInset.top = navigationController?.navigationBar.frame.maxY ?? 0
+            dataView.contentInset.bottom = tabBarController?.tabBar.bounds.height ?? 0
+            dataView.scrollIndicatorInsets = dataView.contentInset
+            automaticallyAdjustsScrollViewInsets = false
+        }
         setupDataView()
         
         if let backgroundColor = statusBarBackgroundColor {

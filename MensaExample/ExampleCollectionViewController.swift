@@ -35,6 +35,10 @@ extension ExampleCollectionViewController: DataDisplaying {
         }
     }
     
+    func handle(_ scrollEvent: ScrollEvent) {
+        print(dataView.topInset)
+    }
+    
     func variant(for item: Item) -> DisplayVariant {
         if item is PrimeFlag {
             return PrimeFlagView.Context.compact
