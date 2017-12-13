@@ -413,7 +413,8 @@ private extension DataMediator {
         let strategy = metricsViewController.itemSizingStrategy(for: item, displayedWith: variant)
         
         var fittedSize: CGSize? = nil
-        if case .constraints = strategy.widthReference, case .constraints = strategy.heightReference {
+        switch (strategy.widthReference, strategy.heightReference) {
+        case (.constraints, _), (_, .constraints):
             metricsViewController.loadViewFromNib(for: variant)
             let metricsView = metricsViewController.view as! View
             displayer.use(metricsView, with: item, variant: variant, displayed: false)
@@ -442,6 +443,8 @@ private extension DataMediator {
             metricsView.setNeedsLayout()
             metricsView.layoutIfNeeded()
             fittedSize = metricsView.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+        default:
+            break
         }
         
         var templateSize: CGSize? = nil
