@@ -28,7 +28,7 @@ final class ItemDisplayingViewController: UIViewController {
         nameOfNib = String(describing: type(of: viewController)).replacingOccurrences(of: "ViewController", with: "View")
         select = { viewController.selectItem($0 as! V.Item) }
         canSelect = { viewController.canSelectItem($0 as! V.Item) }
-        setHighlighted = { viewController.setItemHighlighted($0 as! V.Item, highlighted: $1, animated: $2) }
+        setHighlighted = { viewController.updateHighlight(for: $0 as! V.Item, highlighted: $1, animated: $2) }
         hostsWithConstraints = { viewController.hostsWithConstraints(displayedWith: $0 as! V.DisplayVariantType) }
         isItemHeightBasedOnTemplate = { viewController.isItemHeightBasedOnTemplate(displayedWith: $0 as! V.DisplayVariantType) }
         itemSizingStrategy = { viewController.itemSizingStrategy(for: $0 as! V.Item, displayedWith: $1 as! V.DisplayVariantType) }
@@ -111,7 +111,7 @@ extension ItemDisplayingViewController: ItemDisplaying {
         return canRemove(item)
     }
     
-    func setItemHighlighted(_ item: Item, highlighted: Bool, animated: Bool) {
+    func updateHighlight(for item: Item, highlighted: Bool, animated: Bool) {
         setHighlighted(item, highlighted, animated)
     }
     

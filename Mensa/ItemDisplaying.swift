@@ -15,7 +15,7 @@ public protocol ItemDisplaying: Displaying {
     func selectItem(_ item: Item)
     func canSelectItem(_ item: Item) -> Bool
     func canRemoveItem(_ item: Item) -> Bool
-    func setItemHighlighted(_ item: Item, highlighted: Bool, animated: Bool)
+    func updateHighlight(for item: Item, highlighted: Bool, animated: Bool)
     func hostsWithConstraints(displayedWith variant: DisplayVariantType) -> Bool
     func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariantType) -> Bool
     func itemSizingStrategy(for item: Item, displayedWith variant: DisplayVariantType) -> ItemSizingStrategy
@@ -26,7 +26,7 @@ public extension ItemDisplaying where DisplayVariantType: DisplayVariant {
     func updateForResting(with item: Item) {}
     func canSelectItem(_ item: Item) -> Bool { return true }
     func canRemoveItem(_ item: Item) -> Bool { return false }
-    func setItemHighlighted(_ item: Item, highlighted: Bool, animated: Bool) {}
+    func updateHighlight(for item: Item, highlighted: Bool, animated: Bool) {}
     func hostsWithConstraints(displayedWith variant: DisplayVariantType) -> Bool { return false }
     func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariantType) -> Bool { return false }
     
