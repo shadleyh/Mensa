@@ -20,7 +20,7 @@ final class ItemDisplayingViewController: UIViewController {
 
     private var didLoadView = false
     
-    private weak var viewController: UIViewController!
+    weak var viewController: UIViewController!
     
     init<V: UIViewController>(_ viewController: V) where V: ItemDisplaying {
         self.viewController = viewController

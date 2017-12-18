@@ -27,7 +27,7 @@ public protocol DataDisplaying: Displaying {
     func setupDataView()
     
     // Optional functionality implementors can specify to modify a view that will be used to display a given item.
-    func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool)
+    func use(_ viewController: ViewController, with view: View, for item: Item, variant: DisplayVariant, displayed: Bool)
     
     // Specify which display variant should be used for the given item, other than the default.
     func variant(for item: Item) -> DisplayVariant
@@ -56,7 +56,7 @@ public extension DataDisplaying {
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
     func variant(for item: Item) -> DisplayVariant { return DisplayInvariant() }
-    func use(_ view: View, with item: Item, variant: DisplayVariant, displayed: Bool) {}
+    func use(_ viewController: ViewController, with view: View, for item: Item, variant: DisplayVariant, displayed: Bool) {}
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
     func sizeInsets(for indexPath: IndexPath) -> UIEdgeInsets { return .zero }
     func handle(_ scrollEvent: ScrollEvent) {}
@@ -157,7 +157,7 @@ public extension DataDisplaying where Self: UIViewController {
     }
     
     // Register a view controller type to use to display an item type.
-    func register<Item, ViewController: UIViewController>(_ itemType: Item.Type, conformedToBy conformingTypes: [Any.Type] = [], with viewControllerType: ViewController.Type) where Item == ViewController.Item, ViewController: ItemDisplaying {
+    func register<Item>(_ itemType: Item.Type, conformedToBy conformingTypes: [Any.Type] = [], with viewControllerType: ViewController.Type) where Item == ViewController.Item, ViewController: ItemDisplaying {
         dataMediator?.register(itemType, conformedToBy: conformingTypes, with: viewControllerType)
     }
     

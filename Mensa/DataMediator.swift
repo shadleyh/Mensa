@@ -9,6 +9,7 @@
 final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITableViewDataSource, UITableViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIScrollViewDelegate {
     typealias Item = Displayer.Item
     typealias View = Displayer.View
+    typealias ViewController = Displayer.ViewController
     typealias Identifier = Displayer.DataSourceType.Identifier
     
     private let tableViewCellSeparatorInset: CGFloat?
@@ -89,7 +90,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         }
         
         let hostingCell: HostingCell? = tableView.dequeueReusableCell(withIdentifier: identifier) as? HostingCell ?? {
-            let hostedViewController = viewController(for: type(of: item as Any))
+            let hostedViewController = self.viewController(for: type(of: item as Any))
             let cell = TableViewCell<Item>(parentViewController: parentViewController, hostedViewController: hostedViewController, variant: variant, reuseIdentifier: identifier)
             if let inset = tableViewCellSeparatorInset {
                 cell.separatorInset.left = inset
@@ -100,7 +101,8 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         
         guard let cell = hostingCell else { return UITableViewCell() }
         let view = cell.hostedViewController.view as! View
-        displayer.use(view, with: item, variant: variant, displayed: false)
+        let viewController = cell.hostedViewController.viewController as! ViewController
+        displayer.use(viewController, with: view, for: item, variant: variant, displayed: false)
 
         cell.hostedViewController.update(with: item, variant: variant, displayed: true)
         cell.hostedViewController.view.layoutIfNeeded()
@@ -201,8 +203,10 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let (item, variant, _) = info(for: indexPath)
-        let view = (cell as! TableViewCell<Item>).hostedViewController.view as! View
-        displayer.use(view, with: item, variant: variant, displayed: true)
+        let hostedViewController = (cell as! TableViewCell<Item>).hostedViewController!
+        let view = hostedViewController.view as! View
+        let viewController = hostedViewController.viewController as! ViewController
+        displayer.use(viewController, with: view, for: item, variant: variant, displayed: true)
         
         cell.backgroundColor = tableView.backgroundColor
         if hidesLastTableViewCellSeparator {
@@ -262,8 +266,10 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     // MARK: UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         let (item, variant, _) = info(for: indexPath)
-        let view = (cell as! CollectionViewCell<Item>).hostedViewController.view as! View
-        displayer.use(view, with: item, variant: variant, displayed: true)
+        let hostedViewController =  (cell as! CollectionViewCell<Item>).hostedViewController!
+        let view = hostedViewController.view as! View
+        let viewController = hostedViewController.viewController as! ViewController
+        displayer.use(viewController, with: view, for: item, variant: variant, displayed: true)
         
         if needsHandleResting {
             needsHandleResting = false
@@ -417,7 +423,8 @@ private extension DataMediator {
         case (.constraints, _), (_, .constraints):
             metricsViewController.loadViewFromNib(for: variant)
             let metricsView = metricsViewController.view as! View
-            displayer.use(metricsView, with: item, variant: variant, displayed: false)
+            let viewController = metricsViewController.viewController as! ViewController
+            displayer.use(viewController, with: metricsView, for: item, variant: variant, displayed: false)
             metricsViewController.update(with: item, variant: variant, displayed: false)
             
             if case .constraints = strategy.heightReference {

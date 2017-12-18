@@ -26,7 +26,7 @@ extension ExampleTableViewController: DataDisplaying {
         return .tableView(separatorInset: nil, separatorPlacement: .default)
     }
         
-    func use(_  view: View, with item: Item, variant: DisplayVariant, displayed: Bool) {
+    func use(_ viewController: UIViewController, with view: UIView, for item: Item, variant: DisplayVariant, displayed: Bool) {
         if let number = item as? Number, let numberView = view as? NumberView {
             let size = CGFloat(.maxFontSize - number.value)
             numberView.valueLabel.font = UIFont.systemFont(ofSize: size)
