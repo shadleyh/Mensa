@@ -10,7 +10,7 @@
 public protocol ItemDisplaying: Displaying {
     associatedtype DisplayVariantType = DisplayInvariant
 
-    func update(with item: Item, variant: DisplayVariantType, displayed: Bool)
+    func update(with item: Item, at indexPath: IndexPath, variant: DisplayVariantType, displayed: Bool)
     func updateForResting(with item: Item)
     func selectItem(_ item: Item)
     func canSelectItem(_ item: Item) -> Bool
@@ -42,7 +42,7 @@ public extension ItemDisplaying where Self: UIViewController {
 }
 
 public extension ItemDisplaying where Self: UIViewController, View: Displayed, Item == View.Item, DisplayVariantType == View.DisplayVariantType {
-    func update(with item: Item, variant: DisplayVariantType, displayed: Bool) {
+    func update(with item: Item, at indexPath: IndexPath, variant: DisplayVariantType, displayed: Bool) {
         (view as? Preparable)?.prepare()
         if displayed {
             view.update(with: item, variant: variant)

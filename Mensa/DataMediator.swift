@@ -102,9 +102,9 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         guard let cell = hostingCell else { return UITableViewCell() }
         let view = cell.hostedViewController.view as! View
         let viewController = cell.hostedViewController.viewController as! ViewController
-        displayer.use(viewController, with: view, for: item, variant: variant, displayed: false)
+        displayer.use(viewController, with: view, for: item, at: indexPath, variant: variant, displayed: false)
 
-        cell.hostedViewController.update(with: item, variant: variant, displayed: true)
+        cell.hostedViewController.update(with: item, at: indexPath, variant: variant, displayed: true)
         cell.hostedViewController.view.layoutIfNeeded()
         return cell as! UITableViewCell
     }
@@ -206,7 +206,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         let hostedViewController = (cell as! TableViewCell<Item>).hostedViewController!
         let view = hostedViewController.view as! View
         let viewController = hostedViewController.viewController as! ViewController
-        displayer.use(viewController, with: view, for: item, variant: variant, displayed: true)
+        displayer.use(viewController, with: view, for: item, at: indexPath, variant: variant, displayed: true)
         
         cell.backgroundColor = tableView.backgroundColor
         if hidesLastTableViewCellSeparator {
@@ -252,7 +252,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
             print("Setting up cell at \(indexPath) in \(hostedViewController.parent!) for \(type(of: item as Any)).")
         }
         
-        cell.hostedViewController.update(with: item, variant: variant, displayed: true)
+        cell.hostedViewController.update(with: item, at: indexPath, variant: variant, displayed: true)
         return cell
     }
     
@@ -269,7 +269,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         let hostedViewController =  (cell as! CollectionViewCell<Item>).hostedViewController!
         let view = hostedViewController.view as! View
         let viewController = hostedViewController.viewController as! ViewController
-        displayer.use(viewController, with: view, for: item, variant: variant, displayed: true)
+        displayer.use(viewController, with: view, for: item, at: indexPath, variant: variant, displayed: true)
         
         if needsHandleResting {
             needsHandleResting = false
@@ -424,8 +424,8 @@ private extension DataMediator {
             metricsViewController.loadViewFromNib(for: variant)
             let metricsView = metricsViewController.view as! View
             let viewController = metricsViewController.viewController as! ViewController
-            displayer.use(viewController, with: metricsView, for: item, variant: variant, displayed: false)
-            metricsViewController.update(with: item, variant: variant, displayed: false)
+            displayer.use(viewController, with: metricsView, for: item, at: indexPath, variant: variant, displayed: false)
+            metricsViewController.update(with: item, at: indexPath, variant: variant, displayed: false)
             
             if case .constraints = strategy.heightReference {
                 switch strategy.widthReference {

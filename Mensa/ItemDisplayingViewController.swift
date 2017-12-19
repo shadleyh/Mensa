@@ -8,7 +8,7 @@
 
 final class ItemDisplayingViewController: UIViewController {
     private let nameOfNib: String
-    private let update: (Any, Any, Bool) -> Void
+    private let update: (Any, IndexPath, Any, Bool) -> Void
     private let updateForResting: (Any) -> Void
     private let select: (Any) -> Void
     private let canSelect: (Any) -> Bool
@@ -37,7 +37,7 @@ final class ItemDisplayingViewController: UIViewController {
         }
         update = {
             (viewController.view as? Preparable)?.prepare()
-            viewController.update(with: $0 as! V.Item, variant: $1 as! V.DisplayVariantType, displayed: $2)
+            viewController.update(with: $0 as! V.Item, at: $1, variant: $2 as! V.DisplayVariantType, displayed: $3)
         }
         updateForResting = {
             if let item = $0 as? V.Item {
@@ -91,8 +91,8 @@ extension ItemDisplayingViewController: ItemDisplaying {
     typealias View = UIView
     typealias DisplayVariantType = Any
     
-    func update(with item: Item, variant: DisplayVariantType, displayed: Bool) {
-        update(item, variant, displayed)
+    func update(with item: Item, at indexPath: IndexPath, variant: DisplayVariantType, displayed: Bool) {
+        update(item, indexPath, variant, displayed)
     }
     
     func updateForResting(with item: Item) {
