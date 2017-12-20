@@ -69,6 +69,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     
     func reset() {
         sizes = [:]
+        heightCache = [:]
         currentSections = displayer.dataSource.sections
         needsHandleResting = true
     }
@@ -366,7 +367,7 @@ private extension DataMediator {
     func info(for indexPath: IndexPath) -> (Item, DisplayVariant, String) {
         let item = currentSections[indexPath.section][indexPath.row]
         let key = String(describing: type(of: item as Any))
-        let variant = displayer.variant(for: item)
+        let variant = displayer.variant(for: item, at: indexPath)
         let identifier = key + String(variant.rawValue)
         return (item, variant, identifier)
     }

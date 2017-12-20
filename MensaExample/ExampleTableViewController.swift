@@ -33,7 +33,7 @@ extension ExampleTableViewController: DataDisplaying {
         }
     }
     
-    func variant(for item: Item) -> DisplayVariant {
+    func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant {
         if item is PrimeFlag {
             return PrimeFlagView.Context.regular
         }

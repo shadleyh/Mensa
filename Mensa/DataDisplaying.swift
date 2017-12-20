@@ -30,7 +30,7 @@ public protocol DataDisplaying: Displaying {
     func use(_ viewController: ViewController, with view: View, for item: Item, at indexPath: IndexPath, variant: DisplayVariant, displayed: Bool)
     
     // Specify which display variant should be used for the given item, other than the default.
-    func variant(for item: Item) -> DisplayVariant
+    func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant
     
     // How the given section is inset, if at all.
     func sectionInsets(forSection section: Int) -> UIEdgeInsets?
@@ -55,7 +55,7 @@ public extension DataDisplaying {
     var statusBarBackgroundColor: UIColor? { return nil }
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
-    func variant(for item: Item) -> DisplayVariant { return DisplayInvariant() }
+    func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant { return DisplayInvariant() }
     func use(_ viewController: ViewController, with view: View, for item: Item, at indexPath: IndexPath, variant: DisplayVariant, displayed: Bool) {}
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
     func sizeInsets(for indexPath: IndexPath) -> UIEdgeInsets { return .zero }
