@@ -330,11 +330,11 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        return sizeForSupplementaryView(ofType: .header, inSection: section)
+        return sizeForSupplementaryView(ofType: .header, forWidth: collectionView.bounds.width, inSection: section)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return sizeForSupplementaryView(ofType: .footer, inSection: section)
+        return sizeForSupplementaryView(ofType: .footer, forWidth: collectionView.bounds.width, inSection: section)
     }
     
     func collectionView(_ collectionView: UICollectionView, willDisplaySupplementaryView view: UICollectionReusableView, forElementKind elementKind: String, at indexPath: IndexPath) {
@@ -528,7 +528,7 @@ private extension DataMediator {
         return view
     }
     
-    func sizeForSupplementaryView(ofType type: SectionViewType, inSection section: Int) -> CGSize {
+    func sizeForSupplementaryView(ofType type: SectionViewType, forWidth width: CGFloat, inSection section: Int) -> CGSize {
         guard let text = text(for: type, inSection: section) else { return .zero }
         
         let detailText = self.detailText(forSection: section)
@@ -536,6 +536,7 @@ private extension DataMediator {
         let height = heightCache[identifier] ?? {
             let nib = UINib(nibName: identifier, bundle: Bundle.main)
             let view = nib.instantiate(withOwner: nil, options: nil).first as! SupplementaryView
+            view.frame.size.width = width
             view.label?.text = text
             view.detailLabel?.text = detailText
             view.setNeedsLayout()
