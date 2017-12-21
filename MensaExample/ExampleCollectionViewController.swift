@@ -22,6 +22,7 @@ final class ExampleCollectionViewController: UIViewController {
 extension ExampleCollectionViewController: DataDisplaying {
     typealias Item = NumberOrPrimeFlag
     typealias View = UIView
+    typealias DataViewType = UICollectionView
     
     var displayContext: DataDisplayContext {
         let layout = UICollectionViewFlowLayout()

@@ -21,7 +21,8 @@ final class ExampleTableViewController: UIViewController {
 extension ExampleTableViewController: DataDisplaying {
     typealias Item = NumberOrPrimeFlag
     typealias View = UIView
-
+    typealias DataViewType = UITableView
+    
     var displayContext: DataDisplayContext {
         return .tableView(separatorInset: nil, separatorPlacement: .default)
     }

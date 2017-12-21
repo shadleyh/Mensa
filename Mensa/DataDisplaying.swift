@@ -8,9 +8,8 @@
 
 /// Protocol for view controllers to adopt in order to display data (sections of items) in a table or collection view.
 public protocol DataDisplaying: Displaying {
+    associatedtype DataViewType: DataView
     associatedtype DataSourceType: DataSource where DataSourceType.Item == Item
-    associatedtype TableViewType: UITableView = UITableView
-    associatedtype CollectionViewType: UICollectionView = UICollectionView
     
     // The source of the data to display.
     var dataSource: DataSourceType { get }
@@ -66,17 +65,9 @@ public extension DataDisplaying {
 }
 
 public extension DataDisplaying where Self: UIViewController {
-    var tableView: TableViewType? {
-        return dataView as? TableViewType
-    }
-    
-    var collectionView: CollectionViewType? {
-        return dataView as? CollectionViewType
-    }
-    
-    private(set) var dataView: DataView & UIScrollView {
+    private(set) var dataView: DataViewType {
         get {
-            return associatedObject(for: &dataViewKey) as! DataView & UIScrollView
+            return associatedObject(for: &dataViewKey) as! DataViewType
         }
         set {
             setAssociatedObject(newValue, for: &dataViewKey)
@@ -92,13 +83,12 @@ public extension DataDisplaying where Self: UIViewController {
     
     // Call this method to set up a display context in a view controller by adding an appropriate data view as a subview.
     func setDisplayContext() {
-        let dataView: DataView & UIScrollView
         var tableViewCellSeparatorInset: CGFloat? = nil
         var hidesLastTableViewCellSeparator = false
         
         switch displayContext {
         case let .tableView(separatorInset, separatorPlacement):
-            let tableView = TableViewType.init()
+            let tableView = (DataViewType.self as! UITableView.Type).init()
             tableViewCellSeparatorInset = separatorInset
             hidesLastTableViewCellSeparator = (separatorPlacement == .allCellsButLast)
             if separatorPlacement == nil {
@@ -111,16 +101,14 @@ public extension DataDisplaying where Self: UIViewController {
                     tableView.tableHeaderView?.backgroundColor = tableView.separatorColor
                 }
             }
-            dataView = tableView
-            self.dataView = tableView
+            self.dataView = tableView as! DataViewType
         case let .collectionView(layout):
-            let collectionView = CollectionViewType.init(frame: .zero, collectionViewLayout: layout)
+            let collectionView = (DataViewType.self as! UICollectionView.Type).init(frame: .zero, collectionViewLayout: layout)
             collectionView.backgroundColor = .clear
             if #available (iOS 10, *) {
                 collectionView.isPrefetchingEnabled = false
             }
-            dataView = collectionView
-            self.dataView = collectionView
+            self.dataView = collectionView as! DataViewType
         }
         
         view.insertSubview(dataView, at: 0)
