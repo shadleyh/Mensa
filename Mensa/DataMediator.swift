@@ -342,7 +342,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     }
     
     // MARK: UIScrollViewDelegate
-    func scrollViewDidScroll(_ scrollView: UIScrollView) { displayer.handle(.didScroll) }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) { displayer?.handle(.didScroll) }
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) { displayer.handle(.willBeginDragging) }
     func scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) { displayer.handle(.willEndDragging(velocity: velocity, targetContentOffset: targetContentOffset)) }
     func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) { displayer.handle(.willBeginDecelerating) }
