@@ -16,7 +16,7 @@ private var isTargetInterfaceBuilder: Bool {
 
 func loadNibNamed(nibName: String, variantID: Int) -> UIView {
     if isTargetInterfaceBuilder {
-        let nib = UINib(nibName: nibName, bundle: Bundle.main)
+        let nib: UINib = .init(nibName: nibName)
         return nib.contents[variantID]
     } else {
         let template = findTemplate(withName: nibName, variantID: variantID)
@@ -32,12 +32,12 @@ func sizeOfNibNamed(nibName: String, variantID: Int) -> CGSize {
 }
 
 @discardableResult private func findTemplate(withName nibName: String, variantID: Int) -> Data {
-    let nib = UINib(nibName: nibName, bundle: Bundle.main)
+    let nib: UINib = .init(nibName: nibName)
     let variants = templates[nibName] ?? {
         if !isTargetInterfaceBuilder {
             UIView.setupCoding(for: nibName)
         }
-        print("Instantiating nib for \(nibName).")
+//        print("Instantiating nib for \(nibName).")
         let contents = nib.contents
         let data = contents.map { NSKeyedArchiver.archivedData(withRootObject: $0) }
         templates[nibName] = data
@@ -45,6 +45,24 @@ func sizeOfNibNamed(nibName: String, variantID: Int) -> CGSize {
         return data
     }()
     return variants[min(variantID, variants.count - 1)]
+}
+
+extension UINib {
+    convenience init!(nibName: String) {
+        var bundle: Bundle?
+        for framework in Bundle.allFrameworks {
+            if framework.path(forResource: nibName, ofType: "nib") != nil {
+                bundle = framework
+                break
+            }
+        }
+        
+        if let bundle = bundle {
+            self.init(nibName: nibName, bundle: bundle)
+        } else {
+            return nil
+        }
+    }
 }
 
 private extension UINib {

@@ -6,8 +6,6 @@
 //  Copyright © 2017 Jordan Kay. All rights reserved.
 //
 
-import Cipher
-
 private var swizzledClasses = Set<String>()
 
 extension UIView {

@@ -47,6 +47,9 @@
 		178AC4931E4D086B005BD6A6 /* NibLoading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178AC4921E4D086B005BD6A6 /* NibLoading.swift */; };
 		178DC46E1F632144003966A5 /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178DC46D1F632144003966A5 /* Loading.swift */; };
 		178E5E501E2FF474000EF36C /* Preparable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 178E5E4F1E2FF474000EF36C /* Preparable.swift */; };
+		1796C88B2055B004008CBD92 /* Acracy.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1796C88A2055B004008CBD92 /* Acracy.framework */; };
+		1796FFA32097DBE400BC094A /* Dependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1796FFA22097DBE400BC094A /* Dependencies.swift */; };
+		1796FFA52097DC0500BC094A /* Tarmac.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1796FFA42097DC0500BC094A /* Tarmac.framework */; };
 		17A2E4171EDF72EC002228DD /* Cipher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 17A2E4161EDF72EC002228DD /* Cipher.framework */; };
 		17C406451D429C3000B5F1DB /* ScrollEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17C406441D429C3000B5F1DB /* ScrollEvent.swift */; };
 		17D5059C1FA417B600A29C4F /* HeaderFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17D5059B1FA417B600A29C4F /* HeaderFooterView.swift */; };
@@ -119,6 +122,9 @@
 		178AC4921E4D086B005BD6A6 /* NibLoading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NibLoading.swift; sourceTree = "<group>"; };
 		178DC46D1F632144003966A5 /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		178E5E4F1E2FF474000EF36C /* Preparable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Preparable.swift; sourceTree = "<group>"; };
+		1796C88A2055B004008CBD92 /* Acracy.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Acracy.framework; path = Carthage/Build/iOS/Acracy.framework; sourceTree = "<group>"; };
+		1796FFA22097DBE400BC094A /* Dependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dependencies.swift; sourceTree = "<group>"; };
+		1796FFA42097DC0500BC094A /* Tarmac.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Tarmac.framework; path = Carthage/Build/iOS/Tarmac.framework; sourceTree = "<group>"; };
 		17A2E4161EDF72EC002228DD /* Cipher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cipher.framework; path = Carthage/Build/iOS/Cipher.framework; sourceTree = "<group>"; };
 		17C406441D429C3000B5F1DB /* ScrollEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScrollEvent.swift; sourceTree = "<group>"; };
 		17D5059B1FA417B600A29C4F /* HeaderFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderFooterView.swift; sourceTree = "<group>"; };
@@ -132,7 +138,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1796C88B2055B004008CBD92 /* Acracy.framework in Frameworks */,
 				17A2E4171EDF72EC002228DD /* Cipher.framework in Frameworks */,
+				1796FFA52097DC0500BC094A /* Tarmac.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -178,6 +186,7 @@
 				1723410E1D19E07700011CA6 /* DataView.swift */,
 				172341241D1A07AE00011CA6 /* Display.swift */,
 				174C132D1EC11B4100293EE9 /* DisplayVariant.swift */,
+				1796FFA22097DBE400BC094A /* Dependencies.swift */,
 				177687E41FCCCF0E009463B7 /* Highlightable.swift */,
 				178DC46D1F632144003966A5 /* Loading.swift */,
 				17E740A21F6C7700006BB95E /* Navigation.swift */,
@@ -266,6 +275,8 @@
 		17A2E4151EDF72EB002228DD /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				1796FFA42097DC0500BC094A /* Tarmac.framework */,
+				1796C88A2055B004008CBD92 /* Acracy.framework */,
 				17A2E4161EDF72EC002228DD /* Cipher.framework */,
 			);
 			name = Frameworks;
@@ -333,7 +344,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0800;
-				LastUpgradeCheck = 0900;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Jordan Kay";
 				TargetAttributes = {
 					1772ABB91D188BA0007DC99F = {
@@ -399,6 +410,7 @@
 			files = (
 			);
 			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/iOS/Acracy.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/Cipher.framework",
 			);
 			outputPaths = (
@@ -434,6 +446,7 @@
 				175B360E1EBD3593004FA581 /* Registration.swift in Sources */,
 				171441BF1D1B19E100300658 /* Association.swift in Sources */,
 				174C13301EC11B9F00293EE9 /* ItemSizingStrategy.swift in Sources */,
+				1796FFA32097DBE400BC094A /* Dependencies.swift in Sources */,
 				17D5059C1FA417B600A29C4F /* HeaderFooterView.swift in Sources */,
 				172341231D19F78200011CA6 /* DataDisplaying.swift in Sources */,
 				174C132E1EC11B4100293EE9 /* DisplayVariant.swift in Sources */,
@@ -494,6 +507,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -501,6 +515,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -553,6 +568,7 @@
 				CLANG_WARN_BOOL_CONVERSION = YES;
 				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CLANG_WARN_EMPTY_BODY = YES;
@@ -560,6 +576,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
 				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
@@ -608,7 +625,7 @@
 				);
 				INFOPLIST_FILE = Mensa/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jordanekay.Mensa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -634,12 +651,12 @@
 				);
 				INFOPLIST_FILE = Mensa/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.jordanekay.Mensa;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
 				SWIFT_SWIFT3_OBJC_INFERENCE = Default;
 				SWIFT_VERSION = 4.0;
 			};

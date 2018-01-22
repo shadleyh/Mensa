@@ -12,12 +12,14 @@ public protocol DataDisplaying: Displaying {
     associatedtype DataSourceType: DataSource where DataSourceType.Item == Item
     
     // The source of the data to display.
-    var dataSource: DataSourceType { get }
+    var dataSource: DataSourceType! { get }
     
     // The context (table or collection view and its properties) for displaying the data.
     var displayContext: DataDisplayContext { get }
     
     var statusBarBackgroundColor: UIColor? { get }
+    
+    var displaysDebugBackgrounds: Bool { get }
 
     // Implementors should call `register` for each view controller type that they want to represent each item type displayed.
     func registerItemTypeViewControllerTypePairs()
@@ -30,6 +32,8 @@ public protocol DataDisplaying: Displaying {
     
     // Specify which display variant should be used for the given item, other than the default.
     func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant
+    
+    func tableViewCellSelectionStyle(for item: Item, at indexPath: IndexPath) -> UITableViewCellSelectionStyle
     
     // How the given section is inset, if at all.
     func sectionInsets(forSection section: Int) -> UIEdgeInsets?
@@ -44,6 +48,9 @@ public protocol DataDisplaying: Displaying {
     func handleDeletion(of item: Item, at indexPath: IndexPath)
     
     //
+    func handleMove(of item: Item, fromIndexPath: IndexPath, toIndexPath: IndexPath)
+    
+    //
     func canEditSection(_ section: Int) -> Bool
     
     // Specify additional behavior to be executed when the data is reset.
@@ -52,14 +59,17 @@ public protocol DataDisplaying: Displaying {
 
 public extension DataDisplaying {
     var statusBarBackgroundColor: UIColor? { return nil }
+    var displaysDebugBackgrounds: Bool { return false }
     func registerItemTypeViewControllerTypePairs() {}
     func setupDataView() {}
     func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant { return DisplayInvariant() }
+    func tableViewCellSelectionStyle(for item: Item, at indexPath: IndexPath) -> UITableViewCellSelectionStyle { return .default }
     func use(_ viewController: ViewController, with view: View, for item: Item, at indexPath: IndexPath, variant: DisplayVariant, displayed: Bool) {}
     func sectionInsets(forSection section: Int) -> UIEdgeInsets? { return nil }
     func sizeInsets(for indexPath: IndexPath) -> UIEdgeInsets { return .zero }
     func handle(_ scrollEvent: ScrollEvent) {}
     func handleDeletion(of item: Item, at indexPath: IndexPath) {}
+    func handleMove(of item: Item, fromIndexPath: IndexPath, toIndexPath: IndexPath) {}
     func canEditSection(_ section: Int) -> Bool { return true }
     func reset() {}
 }
@@ -159,9 +169,12 @@ public extension DataDisplaying where Self: UIViewController {
     // Call this method from the view controller to reload the data view.
     func reloadData() {
         resetData()
-        DispatchQueue.main.async {
-            self.dataView.reloadData()
-        }
+        dataView.reloadData()
+    }
+    
+    func resetData() {
+        reset()
+        dataMediator?.reset()
     }
     
     func reloadItem(at indexPath: IndexPath, animated: Bool = false) {
@@ -221,7 +234,7 @@ public extension DataDisplaying where Self: UIViewController {
     }
     
     func removeItem(at indexPath: IndexPath, animated: Bool = false) {
-        removeItems(at: [indexPath])
+        removeItems(at: [indexPath], animated: animated)
     }
     
     // Call this method from the view controller to remove items from the data view.
@@ -229,14 +242,15 @@ public extension DataDisplaying where Self: UIViewController {
         resetData()
         var remove = {}
         if let tableView = dataView as? UITableView {
-            remove = { tableView.deleteRows(at: indexPaths, with: .fade) }
+            remove = { tableView.deleteRows(at: indexPaths, with: .left) }
         } else if let collectionView = dataView as? UICollectionView {
             remove = { collectionView.deleteItems(at: indexPaths) }
         }
         if animated {
-            remove()
+            dataView.batchUpdate(remove, completion: reloadData)
         } else {
             UIView.performWithoutAnimation(remove)
+            reloadData()
         }
     }
 }
@@ -247,11 +261,6 @@ private var dataMediatorKey = "dataMediatorKey"
 private extension DataDisplaying where Self: UIViewController {
     var dataMediator: DataMediator<Self, DataSourceType.Identifier>? {
         return (dataView as? UITableView)?.dataSource as? DataMediator<Self, DataSourceType.Identifier> ?? (dataView as? UICollectionView)?.dataSource as? DataMediator<Self, DataSourceType.Identifier>
-    }
-    
-    func resetData() {
-        reset()
-        dataMediator?.reset()
     }
 }
 

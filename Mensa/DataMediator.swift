@@ -100,7 +100,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
             return cell
         }()
         
-        guard let cell = hostingCell else { return UITableViewCell() }
+        guard let cell = hostingCell else { return .init() }
         let view = cell.hostedViewController.view as! View
         let viewController = cell.hostedViewController.viewController as! ViewController
         displayer.use(viewController, with: view, for: item, at: indexPath, variant: variant, displayed: false)
@@ -150,6 +150,14 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return headerFooterView(in: tableView, forSection: section, ofType: .footer)
     }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return heightForHeaderFooterView(ofType: .header, forWidth: tableView.bounds.width, inSection: section)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return heightForHeaderFooterView(ofType: .footer, forWidth: tableView.bounds.width, inSection: section)
+    }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.backgroundColor = .clear
@@ -158,21 +166,18 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     func tableView(_ tableView: UITableView, willDisplayFooterView view: UIView, forSection section: Int) {
         view.backgroundColor = .clear
     }
-    
-    // TODO: Header and footer height automatic
-    // http://collindonnell.com/2015/09/29/dynamically-sized-table-view-header-or-footer-using-auto-layout/
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let cell = tableView.cellForRow(at: indexPath) as? HostingCell
+        let (item, _, _) = info(for: indexPath)
+        cell?.hostedViewController.select(item)
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
-        return cell?.hostedViewController.canSelectItem(item) ?? false
-    }
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cell = tableView.cellForRow(at: indexPath) as? HostingCell
-        let (item, _, _) = info(for: indexPath)
-        cell?.hostedViewController.selectItem(item)
-        tableView.deselectRow(at: indexPath, animated: true)
+        return cell?.hostedViewController.canSelect(item) ?? false
     }
     
     func tableView(_ tableView: UITableView, didHighlightRowAt indexPath: IndexPath) {
@@ -199,7 +204,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
         guard displayer.canEditSection(indexPath.section) else { return false }
-        return cell?.hostedViewController.canRemoveItem(item) ?? false
+        return cell?.hostedViewController.canRemove(item) ?? false
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -210,6 +215,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         displayer.use(viewController, with: view, for: item, at: indexPath, variant: variant, displayed: true)
         
         cell.backgroundColor = tableView.backgroundColor
+        cell.selectionStyle = displayer.tableViewCellSelectionStyle(for: item, at: indexPath)
         if hidesLastTableViewCellSeparator {
             let isLastCell = (indexPath.row == tableView.numberOfRows(inSection: indexPath.section) - 1)
             if isLastCell {
@@ -222,6 +228,9 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
             DispatchQueue.main.async {
                 self.handleResting(for: tableView)
             }
+        }
+        if displayer.displaysDebugBackgrounds {
+            cell.backgroundColor = .magenta
         }
     }
     
@@ -250,7 +259,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         if !cell.hostingContent {
             let hostedViewController = viewController(for: type(of: item as Any))
             cell.setup(parentViewController: parentViewController, hostedViewController: hostedViewController, variant: variant)
-            print("Setting up cell at \(indexPath) in \(hostedViewController.parent!) for \(type(of: item as Any)).")
+//            print("Setting up cell at \(indexPath) in \(hostedViewController.parent!) for \(type(of: item as Any)).")
         }
         
         cell.hostedViewController.update(with: item, at: indexPath, variant: variant, displayed: true)
@@ -278,12 +287,27 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
                 self.handleResting(for: collectionView)
             }
         }
+        if displayer.displaysDebugBackgrounds {
+            cell.backgroundColor = .magenta
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        let cell = collectionView.cellForItem(at: indexPath) as? HostingCell
+        let (item, _, _) = info(for: indexPath)
+        return cell?.hostedViewController.canSelect(item) ?? false
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
-        cell?.hostedViewController.selectItem(item)
+        cell?.hostedViewController.select(item)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
+        let cell = collectionView.cellForItem(at: indexPath) as? HostingCell
+        let (item, _, _) = info(for: indexPath)
+        return cell?.hostedViewController.canSelect(item) ?? false
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
@@ -297,6 +321,26 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         let (item, _, _) = info(for: indexPath)
         let animated = !collectionView.isTracking
         cell?.hostedViewController.updateHighlight(for: item, highlighted: false, animated: animated)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
+        let cell = collectionView.cellForItem(at: indexPath) as? HostingCell
+        let (item, _, _) = info(for: indexPath)
+        return cell?.hostedViewController.canMove(item) ?? false
+    }
+
+    func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let (item, _, _) = info(for: sourceIndexPath)
+        displayer?.handleMove(of: item, fromIndexPath: sourceIndexPath, toIndexPath: destinationIndexPath)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        let cell = collectionView.cellForItem(at: proposedIndexPath) as? HostingCell
+        let (item, _, _) = info(for: proposedIndexPath)
+        if cell?.hostedViewController.canDisplace(item) ?? false {
+            return proposedIndexPath
+        }
+        return originalIndexPath
     }
     
     // MARK: UICollectionViewDelegateFlowLayout
@@ -372,9 +416,9 @@ private extension DataMediator {
         return (item, variant, identifier)
     }
     
-    func identifier(for type: SectionViewType, inSection section: Int) -> String {
-        var identifier = "\(type.rawValue)View"
-        if let sectionIdentifierName = currentSections[section].identifier?.name {
+    func identifier(for type: SectionViewType, inSection section: Int, withWidth width: CGFloat) -> String {
+        var identifier = "\(type.rawValue.capitalized)View"
+        if let sectionIdentifierName = currentSections[section].identifier?.name(forWidth: width) {
             identifier = sectionIdentifierName + identifier
         }
         return identifier
@@ -493,12 +537,12 @@ private extension DataMediator {
     }
     
     func headerFooterView(in tableView: UITableView, forSection section: Int, ofType type: SectionViewType) -> HeaderFooterView? {
-        guard let text = self.text(for: type, inSection: section) else { return nil }
+        let identifier = self.identifier(for: type, inSection: section, withWidth: tableView.bounds.width)
+        guard let nib = UINib(nibName: identifier) else { return nil }
         
+        let text = self.text(for: type, inSection: section)
         let detailText = self.detailText(forSection: section)
-        let identifier = self.identifier(for: type, inSection: section)
         if !registeredHeaderFooterViewIdentifiers.contains(identifier) {
-            let nib = UINib(nibName: identifier, bundle: Bundle.main)
             tableView.register(nib, forHeaderFooterViewReuseIdentifier: identifier)
             registeredHeaderFooterViewIdentifiers.insert(identifier)
         }
@@ -506,18 +550,51 @@ private extension DataMediator {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: identifier) as? HeaderFooterView else { return nil }
         view.label?.text = text
         view.detailLabel?.text = detailText
+        if case let .tableView(_, separatorPlacement) = displayer.displayContext, type == .header, separatorPlacement == .allCellsAndTop {
+            let height = 1 / UIScreen.main.scale
+            let y = view.bounds.height - height
+            let frame = CGRect(x: 0, y: y, width: view.bounds.width, height: height)
+            let separatorView = UIView.create {
+                $0.frame = frame
+                $0.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+                $0.backgroundColor = tableView.separatorColor
+            }
+            view.addSubview(separatorView)
+            tableView.tableHeaderView = nil
+        }
         return view
+    }
+    
+    func heightForHeaderFooterView(ofType type: SectionViewType, forWidth width: CGFloat, inSection section: Int) -> CGFloat {
+        let identifier = self.identifier(for: type, inSection: section, withWidth: width)
+        guard let nib = UINib(nibName: identifier) else { return 0 }
+        
+        let text = self.text(for: type, inSection: section)
+        let detailText = self.detailText(forSection: section)
+        return heightCache[identifier] ?? {
+            let view = nib.instantiate(withOwner: nil, options: nil).first as! HeaderFooterView
+            view.frame.size.width = width
+            view.label?.text = text
+            view.detailLabel?.text = detailText
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            
+            let size = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            let height = (size.height == 0) ? view.bounds.height : size.height
+            heightCache[identifier] = height
+            return height
+        }()
     }
     
     func supplementaryView(in collectionView: UICollectionView, for indexPath: IndexPath, ofType type: SectionViewType) -> SupplementaryView? {
         let section = indexPath.section
-        guard let text = self.text(for: type, inSection: section) else { return nil }
+        let identifier = self.identifier(for: type, inSection: section, withWidth: collectionView.bounds.width)
+        guard let nib = UINib(nibName: identifier) else { return nil }
         
+        let text = self.text(for: type, inSection: section)
         let detailText = self.detailText(forSection: section)
         let kind = type.collectionElementKind
-        let identifier = self.identifier(for: type, inSection: section)
         if !registeredSupplementaryViewIdentifiers.contains(identifier) {
-            let nib = UINib(nibName: identifier, bundle: Bundle.main)
             collectionView.register(nib, forSupplementaryViewOfKind: type.collectionElementKind, withReuseIdentifier: identifier)
             registeredSupplementaryViewIdentifiers.insert(identifier)
         }
@@ -529,12 +606,12 @@ private extension DataMediator {
     }
     
     func sizeForSupplementaryView(ofType type: SectionViewType, forWidth width: CGFloat, inSection section: Int) -> CGSize {
-        guard let text = text(for: type, inSection: section) else { return .zero }
-        
+        let identifier = self.identifier(for: type, inSection: section, withWidth: width)
+        guard let nib = UINib(nibName: identifier) else { return .zero }
+
+        let text = self.text(for: type, inSection: section)
         let detailText = self.detailText(forSection: section)
-        let identifier = self.identifier(for: type, inSection: section)
         let height = heightCache[identifier] ?? {
-            let nib = UINib(nibName: identifier, bundle: Bundle.main)
             let view = nib.instantiate(withOwner: nil, options: nil).first as! SupplementaryView
             view.frame.size.width = width
             view.label?.text = text
@@ -542,7 +619,8 @@ private extension DataMediator {
             view.setNeedsLayout()
             view.layoutIfNeeded()
             
-            let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            let size = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize)
+            let height = (size.height == 0) ? view.bounds.height : size.height
             heightCache[identifier] = height
             return height
         }()
@@ -568,8 +646,8 @@ private extension DataMediator {
 }
 
 private enum SectionViewType: String {
-    case header = "Header"
-    case footer = "Footer"
+    case header
+    case footer
 }
 
 private extension SectionViewType {

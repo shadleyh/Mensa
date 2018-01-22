@@ -8,8 +8,8 @@
 
 /// UITableView or UICollectionView, used for displaying data.
 public protocol DataView where Self: UIScrollView {
-    init()
     func reloadData()
+    func batchUpdate(_ update: () -> Void, completion: @escaping () -> Void)
 }
 
 public extension DataView {
@@ -39,5 +39,18 @@ public extension DataView {
     }
 }
 
-extension UITableView: DataView {}
-extension UICollectionView: DataView {}
+extension UITableView: DataView {
+    public func batchUpdate(_ update: () -> Void, completion: @escaping () -> Void) {
+        performBatchUpdates(update) { _ in
+            completion()
+        }
+    }
+}
+
+extension UICollectionView: DataView {
+    public func batchUpdate(_ update: () -> Void, completion: @escaping () -> Void) {
+        performBatchUpdates(update) { _ in
+            completion()
+        }
+    }
+}

@@ -64,3 +64,14 @@ public struct ListDataSource<T>: ListHolder {
         items = [initialItem]
     }
 }
+
+public extension ListDataSource where T: Initializable {
+    public var count: Int {
+        get {
+            return items.count
+        }
+        set {
+            items = Array(repeating: T(), count: newValue)
+        }
+    }
+}

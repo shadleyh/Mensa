@@ -29,22 +29,44 @@ extension ExampleCollectionViewController: DataDisplaying {
         return .collectionView(layout: layout)
     }
     
+    func setupDataView() {
+        let gestureRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(handleGesture))
+        dataView.addGestureRecognizer(gestureRecognizer)
+    }
+    
     func use(_ viewController: UIViewController, with view: UIView, for item: Item, at indexPath: IndexPath, variant: DisplayVariant, displayed: Bool) {
         if let number = item as? Number, let numberView = view as? NumberView {
             let size = CGFloat(.maxFontSize - number.value)
             numberView.valueLabel.font = UIFont.systemFont(ofSize: size)
         }
     }
-    
-    func handle(_ scrollEvent: ScrollEvent) {
-        print(dataView.topInset)
-    }
-    
+
     func variant(for item: Item, at indexPath: IndexPath) -> DisplayVariant {
         if item is PrimeFlag {
             return PrimeFlagView.Context.compact
         }
         return DisplayInvariant()
+    }
+}
+
+private extension ExampleCollectionViewController {
+    @objc func handleGesture(gestureRecognizer: UILongPressGestureRecognizer) {
+        guard #available(iOS 9, *) else { return }
+        switch(gestureRecognizer.state) {
+        case .began:
+            let location = gestureRecognizer.location(in: dataView)
+            guard let indexPath = dataView.indexPathForItem(at: location) else {
+                break
+            }
+            dataView.beginInteractiveMovementForItem(at: indexPath)
+        case .changed:
+            let position = gestureRecognizer.location(in: gestureRecognizer.view!)
+            dataView.updateInteractiveMovementTargetPosition(position)
+        case .ended:
+            dataView.endInteractiveMovement()
+        default:
+            dataView.cancelInteractiveMovement()
+        }
     }
 }
 

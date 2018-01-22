@@ -46,10 +46,12 @@ extension Section: Sequence {
     }
 }
 
-public protocol SectionIdentifier: RawRepresentable where RawValue == String {}
+public protocol SectionIdentifier: RawRepresentable where RawValue == String {
+    func name(forWidth width: CGFloat) -> String
+}
 
 extension SectionIdentifier {
-    var name: String {
+    public func name(forWidth width: CGFloat) -> String {
         return rawValue.capitalized
     }
 }

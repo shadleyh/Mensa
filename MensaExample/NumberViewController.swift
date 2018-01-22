@@ -16,7 +16,7 @@ final class NumberViewController: UIViewController, ItemDisplaying {
         view.valueLabel.text = "\(number.value)"
     }
 
-    func selectItem(_ number: Number) {
+    func select(_ number: Number) {
         var number = number
         let factorsString = number.factors.map { "\($0)" }.joined(separator: ", ")
         let message = "The factors of \(number.value) are \(factorsString)."
@@ -27,7 +27,7 @@ final class NumberViewController: UIViewController, ItemDisplaying {
         present(alertController, animated: true, completion: nil)
     }
     
-    func canRemoveItem(_ item: Number) -> Bool {
+    func canRemove(_ item: Number) -> Bool {
         return true
     }
 }
