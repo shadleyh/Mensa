@@ -12,9 +12,9 @@ public protocol ItemDisplaying: Displaying {
 
     func update(with item: Item, at indexPath: IndexPath, variant: DisplayVariantType, displayed: Bool)
     func updateForResting(with item: Item)
-    func selectItem(_ item: Item)
-    func canSelectItem(_ item: Item) -> Bool
-    func canRemoveItem(_ item: Item) -> Bool
+    func select(_ item: Item)
+    func canSelect(_ item: Item) -> Bool
+    func canRemove(_ item: Item) -> Bool
     func updateHighlight(for item: Item, highlighted: Bool, animated: Bool)
     func hostsWithConstraints(displayedWith variant: DisplayVariantType) -> Bool
     func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariantType) -> Bool
@@ -22,10 +22,10 @@ public protocol ItemDisplaying: Displaying {
 }
 
 public extension ItemDisplaying where DisplayVariantType: DisplayVariant {
-    func selectItem(_ item: Item) {}
+    func select(_ item: Item) {}
     func updateForResting(with item: Item) {}
-    func canSelectItem(_ item: Item) -> Bool { return true }
-    func canRemoveItem(_ item: Item) -> Bool { return false }
+    func canSelect(_ item: Item) -> Bool { return true }
+    func canRemove(_ item: Item) -> Bool { return false }
     func updateHighlight(for item: Item, highlighted: Bool, animated: Bool) {}
     func hostsWithConstraints(displayedWith variant: DisplayVariantType) -> Bool { return false }
     func isItemHeightBasedOnTemplate(displayedWith variant: DisplayVariantType) -> Bool { return false }

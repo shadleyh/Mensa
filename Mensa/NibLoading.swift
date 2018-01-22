@@ -49,6 +49,6 @@ func sizeOfNibNamed(nibName: String, variantID: Int) -> CGSize {
 
 private extension UINib {
     var contents: [UIView] {
-        return instantiate(withOwner: nil, options: nil).flatMap{ $0 as? UIView }
+        return instantiate(withOwner: nil, options: nil).compactMap{ $0 as? UIView }
     }
 }

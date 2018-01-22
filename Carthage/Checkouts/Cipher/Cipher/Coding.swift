@@ -3,7 +3,7 @@
 //  Cipher
 //
 //  Created by Jordan Kay on 5/31/17.
-//  Copyright © 2017 Squareknot. All rights reserved.
+//  Copyright © 2017 Cultivr. All rights reserved.
 //
 
 public extension NSCoding where Self: NSObject {
@@ -51,7 +51,7 @@ private extension NSCoding where Self: NSObject {
         var propertyKeys: [String] = []
         while mirror != nil {
             propertyKeys += mirror!.children
-                .flatMap { $0.label }
+                .compactMap { $0.label }
                 .filter { !$0.contains(".") }
             mirror = mirror?.superclassMirror
         }

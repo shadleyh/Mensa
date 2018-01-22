@@ -150,6 +150,14 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         return headerFooterView(in: tableView, forSection: section, ofType: .footer)
     }
+
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return heightForHeaderFooterView(ofType: .header, forWidth: tableView.bounds.width, inSection: section)
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return heightForHeaderFooterView(ofType: .footer, forWidth: tableView.bounds.width, inSection: section)
+    }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
         view.backgroundColor = .clear
@@ -159,19 +167,16 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         view.backgroundColor = .clear
     }
     
-    // TODO: Header and footer height automatic
-    // http://collindonnell.com/2015/09/29/dynamically-sized-table-view-header-or-footer-using-auto-layout/
-    
     func tableView(_ tableView: UITableView, shouldHighlightRowAt indexPath: IndexPath) -> Bool {
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
-        return cell?.hostedViewController.canSelectItem(item) ?? false
+        return cell?.hostedViewController.canSelect(item) ?? false
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
-        cell?.hostedViewController.selectItem(item)
+        cell?.hostedViewController.select(item)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -199,7 +204,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
         let cell = tableView.cellForRow(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
         guard displayer.canEditSection(indexPath.section) else { return false }
-        return cell?.hostedViewController.canRemoveItem(item) ?? false
+        return cell?.hostedViewController.canRemove(item) ?? false
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -283,7 +288,7 @@ final class DataMediator<Displayer: DataDisplaying, Identifier>: NSObject, UITab
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? HostingCell
         let (item, _, _) = info(for: indexPath)
-        cell?.hostedViewController.selectItem(item)
+        cell?.hostedViewController.select(item)
     }
     
     func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
@@ -507,6 +512,26 @@ private extension DataMediator {
         view.label?.text = text
         view.detailLabel?.text = detailText
         return view
+    }
+    
+    func heightForHeaderFooterView(ofType type: SectionViewType, forWidth width: CGFloat, inSection section: Int) -> CGFloat {
+        guard let text = text(for: type, inSection: section) else { return 0 }
+        
+        let detailText = self.detailText(forSection: section)
+        let identifier = self.identifier(for: type, inSection: section)
+        return heightCache[identifier] ?? {
+            let nib = UINib(nibName: identifier, bundle: Bundle.main)
+            let view = nib.instantiate(withOwner: nil, options: nil).first as! HeaderFooterView
+            view.frame.size.width = width
+            view.label?.text = text
+            view.detailLabel?.text = detailText
+            view.setNeedsLayout()
+            view.layoutIfNeeded()
+            
+            let height = view.systemLayoutSizeFitting(UILayoutFittingCompressedSize).height
+            heightCache[identifier] = height
+            return height
+        }()
     }
     
     func supplementaryView(in collectionView: UICollectionView, for indexPath: IndexPath, ofType type: SectionViewType) -> SupplementaryView? {

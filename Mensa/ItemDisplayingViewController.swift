@@ -26,14 +26,14 @@ final class ItemDisplayingViewController: UIViewController {
         self.viewController = viewController
         
         nameOfNib = String(describing: type(of: viewController)).replacingOccurrences(of: "ViewController", with: "View")
-        select = { viewController.selectItem($0 as! V.Item) }
-        canSelect = { viewController.canSelectItem($0 as! V.Item) }
+        select = { viewController.select($0 as! V.Item) }
+        canSelect = { viewController.canSelect($0 as! V.Item) }
         setHighlighted = { viewController.updateHighlight(for: $0 as! V.Item, highlighted: $1, animated: $2) }
         hostsWithConstraints = { viewController.hostsWithConstraints(displayedWith: $0 as! V.DisplayVariantType) }
         isItemHeightBasedOnTemplate = { viewController.isItemHeightBasedOnTemplate(displayedWith: $0 as! V.DisplayVariantType) }
         itemSizingStrategy = { viewController.itemSizingStrategy(for: $0 as! V.Item, displayedWith: $1 as! V.DisplayVariantType) }
         canRemove = {
-            ($0 as? V.Item).map { viewController.canRemoveItem($0) } ?? false
+            ($0 as? V.Item).map { viewController.canRemove($0) } ?? false
         }
         update = {
             (viewController.view as? Preparable)?.prepare()
@@ -99,15 +99,15 @@ extension ItemDisplayingViewController: ItemDisplaying {
         updateForResting(item)
     }
     
-    func selectItem(_ item: Item) {
+    func select(_ item: Item) {
         select(item)
     }
     
-    func canSelectItem(_ item: Item) -> Bool {
+    func canSelect(_ item: Item) -> Bool {
         return canSelect(item)
     }
     
-    func canRemoveItem(_ item: Item) -> Bool {
+    func canRemove(_ item: Item) -> Bool {
         return canRemove(item)
     }
     
