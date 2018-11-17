@@ -17,3 +17,14 @@ public class LoadingItemView: UIView {
 extension LoadingItemView: Displayed {
     public func update(with loadingItem: LoadingItem, variant: DisplayInvariant) {}
 }
+
+public final class LoadingItemViewController: UIViewController {}
+
+extension LoadingItemViewController: ItemDisplaying {
+    public typealias Item = LoadingItem
+    public typealias View = LoadingItemView
+    
+    public func isItemHeightBasedOnTemplate(displayedWith variant: DisplayInvariant) -> Bool {
+        return true
+    }
+}
