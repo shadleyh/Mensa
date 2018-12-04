@@ -7,5 +7,4 @@
 //
 
 @_exported import Acracy
-@_exported import Cipher
 @_exported import Tarmac

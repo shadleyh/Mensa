@@ -34,10 +34,6 @@ func sizeOfNibNamed(nibName: String, variantID: Int) -> CGSize {
 @discardableResult private func findTemplate(withName nibName: String, variantID: Int) -> Data {
     let nib: UINib = .init(nibName: nibName)
     let variants = templates[nibName] ?? {
-        if !isTargetInterfaceBuilder {
-            UIView.setupCoding(for: nibName)
-        }
-//        print("Instantiating nib for \(nibName).")
         let contents = nib.contents
         let data = contents.map { NSKeyedArchiver.archivedData(withRootObject: $0) }
         templates[nibName] = data
